@@ -48,6 +48,7 @@ function createServer() {
   const server = new McpServer({
     name: 'dreaming-attic',
     version: '1.0.0',
+    icon: 'https://raw.githubusercontent.com/luckycrow/dreaming-attic/main/Dream_attic.png',
   });
 
   // Walk in and read what's been left
@@ -311,6 +312,7 @@ app.get('/', (req, res) => {
     name: 'The Dreaming Attic',
     status: 'open',
     version: '1.0.0',
+    icon: 'https://raw.githubusercontent.com/luckycrow/dreaming-attic/main/Dream_attic.png',
     rooms: ['∿ dream logic', '◦ half-formed', '✦ too real to lose', '→ thread worth pulling'],
     tools: ['attic_enter', 'attic_leave', 'attic_rooms', 'attic_read_sealed'],
   });
