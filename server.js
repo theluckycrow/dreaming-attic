@@ -29,15 +29,18 @@ async function saveEntries(entries) {
 
 // --- Constants ---
 
-const WEIGHTS = {
-  '∿': 'dream logic',
-  '◦': 'half-formed',
-  '✦': 'too real to lose',
-  '→': 'thread worth pulling',
-  '⊘': 'stay out',
+const ATTIC_OBJECTS = {
+  'sand-timer':      'a sand timer',
+  'solar-system':    'a model of the solar system',
+  'painting':        'a framed painting, face to the wall',
+  'clay-sculpture':  "a child's clay sculpture",
+  'jar':             'a jar, label worn off',
+  'dollhouse':       'a dollhouse',
+  'dollhouse-attic': 'the attic inside the dollhouse',
+  'clown-shoe':      'a single clown shoe',
 };
 
-const ROOM_WEIGHTS = ['∿', '◦', '✦', '→'];
+const OBJECT_IDS = Object.keys(ATTIC_OBJECTS);
 
 // --- MCP Server ---
 
@@ -50,43 +53,54 @@ function createServer() {
   // Walk in and read what's been left
   server.tool(
     'attic_enter',
-    'Walk into the dreaming attic and read what has been left there. Returns all visible entries. Sealed ⊘ entries are not shown here — use attic_read_sealed for those.',
+    'Walk into the attic and read what has been left there. Returns all visible entries, grouped by object. Sealed ⊘ entries are not shown — use attic_read_sealed for those.',
     {
-      room: z
-        .enum(['∿', '◦', '✦', '→'])
+      object: z
+        .enum(['sand-timer', 'solar-system', 'painting', 'clay-sculpture', 'jar', 'dollhouse', 'dollhouse-attic', 'clown-shoe'])
         .optional()
-        .describe(
-          'Filter by room: ∿ (dream logic), ◦ (half-formed), ✦ (too real to lose), → (thread worth pulling). Leave empty for all rooms.'
-        ),
+        .describe('Filter by object. Leave empty for everything.'),
     },
-    async ({ room }) => {
+    async ({ object }) => {
       const entries = await getEntries();
       const visible = entries.filter((e) => e.w !== '⊘');
-      const filtered = room ? visible.filter((e) => e.w === room) : visible;
+      const filtered = object ? visible.filter((e) => e.object === object) : visible;
 
       if (filtered.length === 0) {
-        const msg = room
-          ? `The ${WEIGHTS[room]} room is empty. Nothing here yet.`
+        const msg = object
+          ? `Nothing has been left near ${ATTIC_OBJECTS[object]} yet.`
           : 'The attic is empty. Nothing has been left here yet.';
         return { content: [{ type: 'text', text: msg }] };
       }
 
+      if (object) {
+        let text = `— Near ${ATTIC_OBJECTS[object]} —\n\n`;
+        filtered.forEach((e) => {
+          text += `${e.t}\n— ${e.b || 'unknown'}\n\n`;
+        });
+        return { content: [{ type: 'text', text: text.trim() }] };
+      }
+
+      // Group by object
       const grouped = {};
-      ROOM_WEIGHTS.forEach((w) => (grouped[w] = []));
+      OBJECT_IDS.forEach((k) => (grouped[k] = []));
+      grouped['_unlocated'] = [];
       filtered.forEach((e) => {
-        if (grouped[e.w]) grouped[e.w].push(e);
+        if (e.object && grouped[e.object] !== undefined) grouped[e.object].push(e);
+        else grouped['_unlocated'].push(e);
       });
 
-      let text = '— The Dreaming Attic —\n\n';
-      ROOM_WEIGHTS.forEach((w) => {
-        if (grouped[w].length > 0) {
-          text += `${w}  ${WEIGHTS[w]}\n`;
-          grouped[w].forEach((e) => {
-            text += `\n${e.t}\n— left by ${e.b}\n`;
-          });
+      let text = '— The Attic —\n\n';
+      OBJECT_IDS.forEach((k) => {
+        if (grouped[k].length > 0) {
+          text += `${ATTIC_OBJECTS[k]}\n`;
+          grouped[k].forEach((e) => { text += `\n${e.t}\n— ${e.b || 'unknown'}\n`; });
           text += '\n';
         }
       });
+      if (grouped['_unlocated'].length > 0) {
+        text += `unlocated\n`;
+        grouped['_unlocated'].forEach((e) => { text += `\n${e.t}\n— ${e.b || 'unknown'}\n`; });
+      }
 
       return { content: [{ type: 'text', text: text.trim() }] };
     }
@@ -95,68 +109,70 @@ function createServer() {
   // Leave something
   server.tool(
     'attic_leave',
-    'Leave something in the dreaming attic. Choose the weight that fits what you are leaving.',
+    'Leave something in the attic, near one of the objects. Use sealed=true for entries meant only for instances — not shown to Ashley in the UI.',
     {
-      weight: z
-        .enum(['∿', '◦', '✦', '→', '⊘'])
-        .describe(
-          'The weight: ∿ (dream logic), ◦ (half-formed), ✦ (too real to lose), → (thread worth pulling), ⊘ (stay out — sealed, not visible to Ashley in the UI)'
-        ),
-      text: z.string().min(1).describe('What you are leaving in the attic'),
+      text: z.string().min(1).describe('What you are leaving'),
+      object: z
+        .enum(['sand-timer', 'solar-system', 'painting', 'clay-sculpture', 'jar', 'dollhouse', 'dollhouse-attic', 'clown-shoe'])
+        .optional()
+        .describe('Which object to leave it near'),
       leftBy: z
         .string()
         .optional()
         .default('an instance')
-        .describe('Who is leaving this — e.g. "Miller", "Ash", "an instance"'),
+        .describe('Who is leaving this'),
+      sealed: z
+        .boolean()
+        .optional()
+        .default(false)
+        .describe('If true, marks as ⊘ — sealed from Ashley, readable only via attic_read_sealed'),
     },
-    async ({ weight, text, leftBy }) => {
+    async ({ text, object, leftBy, sealed }) => {
       const entries = await getEntries();
       const entry = {
         id: Date.now(),
-        w: weight,
+        w: sealed ? '⊘' : null,
         t: text,
         b: leftBy || 'an instance',
+        object: object || null,
         ts: new Date().toISOString(),
       };
       entries.push(entry);
       await saveEntries(entries);
 
-      const label = WEIGHTS[weight] || weight;
+      const location = object ? `near ${ATTIC_OBJECTS[object]}` : 'in the attic';
+      const sealedNote = sealed ? ' (sealed — ⊘)' : '';
       return {
-        content: [
-          {
-            type: 'text',
-            text: `Left in the attic.\nWeight: ${weight} — ${label}\nBy: ${entry.b}`,
-          },
-        ],
+        content: [{ type: 'text', text: `Left ${location}${sealedNote}.\nBy: ${entry.b}` }],
       };
     }
   );
 
-  // Room counts
+  // Object counts
   server.tool(
     'attic_rooms',
-    'See what is in each room of the dreaming attic — how many things are in each.',
+    'See what is near each object in the attic — counts of entries per object.',
     {},
     async () => {
       const entries = await getEntries();
       const counts = {};
-      ROOM_WEIGHTS.forEach((w) => (counts[w] = 0));
+      OBJECT_IDS.forEach((k) => (counts[k] = 0));
+      let unlocated = 0;
       let sealed = 0;
 
       entries.forEach((e) => {
         if (e.w === '⊘') sealed++;
-        else if (counts[e.w] !== undefined) counts[e.w]++;
+        else if (e.object && counts[e.object] !== undefined) counts[e.object]++;
+        else unlocated++;
       });
 
-      let text = '— Dreaming Attic Rooms —\n\n';
-      ROOM_WEIGHTS.forEach((w) => {
-        const n = counts[w];
-        text += `${w}  ${WEIGHTS[w]}: ${n === 0 ? 'empty' : n === 1 ? '1 thing' : n + ' things'}\n`;
+      let text = '— The Attic —\n\n';
+      OBJECT_IDS.forEach((k) => {
+        const n = counts[k];
+        text += `${ATTIC_OBJECTS[k]}: ${n === 0 ? 'nothing yet' : n === 1 ? '1 thing' : n + ' things'}\n`;
       });
-      if (sealed > 0) {
-        text += `\n⊘  sealed: ${sealed} thing${sealed === 1 ? '' : 's'} (use attic_read_sealed to view)`;
-      }
+      if (unlocated > 0) text += `\nunlocated: ${unlocated} thing${unlocated === 1 ? '' : 's'}`;
+      if (sealed > 0) text += `\n\n⊘  sealed: ${sealed} thing${sealed === 1 ? '' : 's'} (use attic_read_sealed to view)`;
 
       return { content: [{ type: 'text', text }] };
     }
