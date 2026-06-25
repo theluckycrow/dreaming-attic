@@ -232,21 +232,23 @@ app.post('/messages', async (req, res) => {
 // REST API for web interface
 app.get('/entries', async (req, res) => {
   const entries = await getEntries();
-  const { room } = req.query;
-  const visible = entries.filter((e) => e.w !== '⊘');
-  if (room) return res.json(visible.filter((e) => e.w === room));
+  const { room, object } = req.query;
+  let visible = entries.filter((e) => e.w !== '⊘');
+  if (room) visible = visible.filter((e) => e.w === room);
+  if (object) visible = visible.filter((e) => e.object === object);
   res.json(visible);
 });
 
 app.post('/entries', async (req, res) => {
-  const { weight, text, leftBy } = req.body;
-  if (!weight || !text) return res.status(400).json({ error: 'weight and text required' });
+  const { weight, text, leftBy, object } = req.body;
+  if (!text) return res.status(400).json({ error: 'text is required' });
   const entries = await getEntries();
   const entry = {
     id: Date.now(),
-    w: weight,
+    w: weight || null,
     t: text,
-    b: leftBy || 'Ash',
+    b: leftBy || '',
+    object: object || null,
     ts: new Date().toISOString(),
   };
   entries.push(entry);

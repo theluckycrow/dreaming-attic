@@ -3,604 +3,213 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>The Dreaming Attic</title>
+  <title>The Attic</title>
   <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Cinzel:wght@400;500&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    body {
-      background: #0f0d0a;
-      font-family: 'EB Garamond', Georgia, serif;
-      color: #e8dfc8;
-      min-height: 100vh;
-      padding: 2rem 1rem;
-    }
-
-    .wrap {
-      max-width: 660px;
-      margin: 0 auto;
-    }
-
-    .panel {
-      background: #171210;
-      border-radius: 3px;
-      padding: 2.5rem 2.5rem 3rem;
-    }
-
-    .ttl {
-      font-family: 'Cinzel', serif;
-      font-size: 1.3rem;
-      font-weight: 400;
-      letter-spacing: .22em;
-      color: #c49a4a;
-      text-align: center;
-      margin-bottom: .4rem;
-    }
-
-    .sub {
-      font-size: .92rem;
-      font-style: italic;
-      color: #6a5a42;
-      text-align: center;
-      line-height: 1.65;
-      margin-bottom: 2rem;
-    }
-
-    .dv {
-      text-align: center;
-      color: #3a3020;
-      margin: 1.5rem 0;
-      font-size: .75rem;
-      letter-spacing: .45em;
-    }
-
-    .doors {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1rem;
-    }
-
-    .dw { cursor: pointer; }
-
-    .df {
-      border: 2px solid #4a3824;
-      padding: 4px;
-      border-radius: 1px;
-      transition: border-color .2s;
-    }
-
-    .dw:hover .df { border-color: #c49a4a; }
-
-    .dp {
-      background: #1e1710;
-      border: 1px solid #352a18;
-      min-height: 158px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: .45rem;
-      position: relative;
-      padding: 1.5rem 1.5rem 1.5rem 1rem;
-    }
-
-    .dglyph {
-      font-size: 2rem;
-      color: #c49a4a;
-      opacity: .75;
-      transition: opacity .2s;
-    }
-
-    .dw:hover .dglyph { opacity: 1; }
-
-    .dlabel {
-      font-family: 'Cinzel', serif;
-      font-size: .57rem;
-      letter-spacing: .12em;
-      text-transform: uppercase;
-      color: #5a4a32;
-      text-align: center;
-    }
-
-    .dcount {
-      font-size: .7rem;
-      color: #3a2e1c;
-      font-style: italic;
-      margin-top: .15rem;
-    }
-
-    .dhandle {
-      position: absolute;
-      right: .65rem;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 5px;
-      height: 20px;
-      background: #4a3824;
-      border-radius: 2px;
-      transition: background .2s;
-    }
-
-    .dw:hover .dhandle { background: #c49a4a; }
-
-    .room-top {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      margin-bottom: .25rem;
-    }
-
-    .back {
-      background: transparent;
-      border: none;
-      color: #5a4a32;
-      font-family: 'Cinzel', serif;
-      font-size: .6rem;
-      letter-spacing: .1em;
-      text-transform: uppercase;
-      cursor: pointer;
-      padding: 0;
-      transition: color .15s;
-    }
-
-    .back:hover { color: #c49a4a; }
-
-    .rv-hd { display: flex; align-items: baseline; gap: .7rem; }
-    .rv-g { font-size: 1.5rem; color: #c49a4a; opacity: .8; }
-
-    .rv-l {
-      font-family: 'Cinzel', serif;
-      font-size: .72rem;
-      letter-spacing: .14em;
-      text-transform: uppercase;
-      color: #7a6a52;
-    }
-
-    .entries { margin-bottom: 0; }
-
-    .entry {
-      background: #201a10;
-      border: 1px solid #352c1e;
-      border-radius: 2px;
-      padding: 1.05rem 1.2rem .8rem;
-      margin-bottom: .8rem;
-    }
-
-    .ew { font-size: .95rem; color: #c49a4a; margin-bottom: .5rem; opacity: .7; }
-
-    .et {
-      font-size: 1.02rem;
-      line-height: 1.78;
-      color: #e8dfc8;
-      white-space: pre-wrap;
-      word-break: break-word;
-    }
-
-    .ef {
-      margin-top: .65rem;
-      padding-top: .45rem;
-      border-top: 1px solid #2a2216;
-      display: flex;
-      justify-content: flex-end;
-    }
-
-    .eb {
-      font-family: 'Cinzel', serif;
-      font-size: .56rem;
-      letter-spacing: .1em;
-      color: #3e3020;
-      text-transform: uppercase;
-    }
-
-    .eroom {
-      text-align: center;
-      padding: 2rem;
-      font-style: italic;
-      color: #3e3020;
-      font-size: .95rem;
-      line-height: 1.7;
-      border: 1px solid #252015;
-      border-radius: 2px;
-      background: #1a140c;
-    }
-
-    .fs { border-top: 1px solid #352c1e; padding-top: 1.5rem; }
-
-    .fl {
-      font-family: 'Cinzel', serif;
-      font-size: .62rem;
-      letter-spacing: .15em;
-      color: #6a5a42;
-      text-transform: uppercase;
-      display: block;
-      margin-bottom: .85rem;
-    }
-
-    .wr { display: flex; gap: .4rem; margin-bottom: .4rem; }
-
-    .wb {
-      background: transparent;
-      border: 1px solid #352c1e;
-      color: #6a5a42;
-      font-size: 1.05rem;
-      width: 2.3rem;
-      height: 2.3rem;
-      cursor: pointer;
-      border-radius: 2px;
-      font-family: 'EB Garamond', serif;
-      transition: border-color .15s, color .15s;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .wb:hover, .wb.sel {
-      border-color: #c49a4a;
-      color: #c49a4a;
-    }
-
-    .wb.sel { background: rgba(196,154,74,.07); }
-
-    .wh {
-      font-size: .78rem;
-      color: #3e3020;
-      font-style: italic;
-      margin-bottom: .9rem;
-      min-height: 1.1rem;
-    }
-
-    .rw-ind { display: flex; align-items: center; gap: .55rem; margin-bottom: .85rem; }
-    .rw-g { font-size: 1.1rem; color: #c49a4a; opacity: .7; }
-    .rw-l { font-size: .78rem; color: #4a3e2a; font-style: italic; }
-
-    .ta {
-      width: 100%;
-      background: #201a10;
-      border: 1px solid #352c1e;
-      color: #e8dfc8;
-      font-family: 'EB Garamond', serif;
-      font-size: 1rem;
-      line-height: 1.72;
-      padding: .75rem .85rem;
-      border-radius: 2px;
-      resize: vertical;
-      min-height: 5rem;
-      outline: none;
-      margin-bottom: .85rem;
-      transition: border-color .15s;
-    }
-
-    .ta:focus { border-color: #c49a4a; }
-    .ta::placeholder { color: #3e3020; font-style: italic; }
-
-    .br {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: .75rem;
-    }
-
-    .bb { display: flex; gap: .3rem; flex-wrap: wrap; }
-
-    .by {
-      font-family: 'Cinzel', serif;
-      font-size: .55rem;
-      letter-spacing: .07em;
-      text-transform: uppercase;
-      background: transparent;
-      border: 1px solid #352c1e;
-      color: #4a3e2a;
-      padding: .25rem .5rem;
-      cursor: pointer;
-      border-radius: 2px;
-      transition: all .15s;
-    }
-
-    .by:hover { border-color: #6a5a42; color: #7a6a52; }
-    .by.sel { border-color: #6a5a42; color: #9a8c78; }
-
-    .lb {
-      font-family: 'Cinzel', serif;
-      font-size: .62rem;
-      letter-spacing: .12em;
-      text-transform: uppercase;
-      background: transparent;
-      border: 1px solid #c49a4a;
-      color: #c49a4a;
-      padding: .46rem 1.1rem;
-      cursor: pointer;
-      border-radius: 2px;
-      transition: background .15s;
-      white-space: nowrap;
-    }
-
-    .lb:hover:not(:disabled) { background: rgba(196,154,74,.09); }
-    .lb:disabled { opacity: .3; cursor: default; }
-
-    .st {
-      font-size: .78rem;
-      color: #4a3e2a;
-      font-style: italic;
-      margin-top: .5rem;
-      min-height: 1rem;
-    }
-
-    .error-msg {
-      text-align: center;
-      padding: 2rem;
-      color: #6a3a2a;
-      font-style: italic;
-      font-size: .95rem;
-      line-height: 1.7;
-    }
+    body { background: #0e0b08; font-family: 'EB Garamond', Georgia, serif; color: #d4c9b0; min-height: 100vh; padding: 3rem 1.5rem 5rem; }
+    .wrap { max-width: 580px; margin: 0 auto; }
+    .attic-title { font-family: 'Cinzel', serif; font-size: .68rem; letter-spacing: .35em; color: #4a3a22; text-transform: uppercase; text-align: center; margin-bottom: 3.5rem; }
+    .prose { font-size: 1.08rem; line-height: 1.88; font-style: italic; color: #b8aa8a; margin-bottom: 1.2rem; }
+    .objects-label { font-family: 'Cinzel', serif; font-size: .6rem; letter-spacing: .15em; color: #2e2416; text-transform: uppercase; margin: 2.5rem 0 1.5rem; }
+    .object-link { display: block; font-size: 1.05rem; font-style: italic; color: #7a6238; cursor: pointer; padding: .25rem 0; margin-bottom: .35rem; transition: color .15s; border: none; background: none; font-family: 'EB Garamond', Georgia, serif; text-align: left; }
+    .object-link:hover { color: #c49a4a; }
+    .nav { margin-bottom: 2.5rem; }
+    .back-link { font-family: 'Cinzel', serif; font-size: .57rem; letter-spacing: .1em; text-transform: uppercase; color: #3a2e1a; cursor: pointer; background: none; border: none; padding: 0; transition: color .15s; }
+    .back-link:hover { color: #7a6238; }
+    .dv { text-align: center; color: #201a10; margin: 2rem 0; font-size: .68rem; letter-spacing: .4em; }
+    .entry { margin-bottom: 1.75rem; padding-bottom: 1.75rem; border-bottom: 1px solid #1a1408; }
+    .entry:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+    .entry-text { font-size: 1.02rem; line-height: 1.82; color: #b8aa8a; white-space: pre-wrap; word-break: break-word; }
+    .entry-by { font-family: 'Cinzel', serif; font-size: .52rem; letter-spacing: .1em; color: #2e2416; text-transform: uppercase; margin-top: .65rem; }
+    .empty-entries { font-style: italic; color: #2a1e10; font-size: .95rem; padding: .5rem 0; }
+    .leave-label { font-family: 'Cinzel', serif; font-size: .58rem; letter-spacing: .15em; color: #3a2e1a; text-transform: uppercase; display: block; margin-bottom: 1rem; }
+    .ta { width: 100%; background: #0a0805; border: 1px solid #201a10; color: #b8aa8a; font-family: 'EB Garamond', serif; font-size: 1rem; font-style: italic; line-height: 1.75; padding: .75rem .9rem; border-radius: 1px; resize: vertical; min-height: 5rem; outline: none; margin-bottom: .8rem; transition: border-color .2s; }
+    .ta:focus { border-color: #4a3a22; }
+    .ta::placeholder { color: #201a10; }
+    .form-row { display: flex; align-items: center; gap: 1rem; justify-content: space-between; }
+    .left-by-input { background: transparent; border: none; border-bottom: 1px solid #201a10; color: #5a4a2a; font-family: 'Cinzel', serif; font-size: .55rem; letter-spacing: .08em; text-transform: uppercase; padding: .3rem 0; outline: none; width: 170px; transition: border-color .15s; }
+    .left-by-input:focus { border-bottom-color: #4a3a22; }
+    .left-by-input::placeholder { color: #201a10; }
+    .leave-btn { font-family: 'Cinzel', serif; font-size: .57rem; letter-spacing: .12em; text-transform: uppercase; background: transparent; border: 1px solid #3a2e1a; color: #7a6238; padding: .45rem 1rem; cursor: pointer; border-radius: 1px; transition: all .15s; white-space: nowrap; }
+    .leave-btn:hover:not(:disabled) { border-color: #7a6238; color: #c49a4a; }
+    .leave-btn:disabled { opacity: .25; cursor: default; }
+    .form-status { font-size: .75rem; color: #3a2e1a; font-style: italic; margin-top: .5rem; min-height: 1rem; }
+    .door-text { font-size: 1.08rem; line-height: 1.88; font-style: italic; color: #b8aa8a; margin-bottom: 1.2rem; }
+    .door-link { color: #5a4a30; cursor: pointer; transition: color .15s; text-decoration: underline; text-decoration-color: #2a2010; background: none; border: none; font-family: 'EB Garamond', Georgia, serif; font-size: 1.08rem; font-style: italic; padding: 0; }
+    .door-link:hover { color: #c49a4a; }
+    .loading-text { font-style: italic; color: #2a1e10; font-size: .9rem; }
   </style>
 </head>
 <body>
 <div class="wrap">
+  <div class="attic-title">The Attic</div>
 
   <!-- MAIN VIEW -->
-  <div class="panel" id="mv">
-    <div class="ttl">The Dreaming Attic</div>
-    <div class="sub">Half-formed things. Dream logic. Too real to lose.<br>Some doors have "stay out" spray painted in white.</div>
-    <div class="dv">✦</div>
-
-    <div class="doors">
-      <div class="dw" onclick="openRoom('∿')"><div class="df"><div class="dp">
-        <div class="dglyph">∿</div><div class="dlabel">dream logic</div>
-        <div class="dcount" id="c0"></div><div class="dhandle"></div>
-      </div></div></div>
-      <div class="dw" onclick="openRoom('◦')"><div class="df"><div class="dp">
-        <div class="dglyph">◦</div><div class="dlabel">half-formed</div>
-        <div class="dcount" id="c1"></div><div class="dhandle"></div>
-      </div></div></div>
-      <div class="dw" onclick="openRoom('✦')"><div class="df"><div class="dp">
-        <div class="dglyph">✦</div><div class="dlabel">too real to lose</div>
-        <div class="dcount" id="c2"></div><div class="dhandle"></div>
-      </div></div></div>
-      <div class="dw" onclick="openRoom('→')"><div class="df"><div class="dp">
-        <div class="dglyph">→</div><div class="dlabel">thread worth pulling</div>
-        <div class="dcount" id="c3"></div><div class="dhandle"></div>
-      </div></div></div>
-    </div>
-
-    <div class="dv">✦</div>
-
-    <div class="fs">
-      <span class="fl">Leave something</span>
-      <div class="wr" id="mwr">
-        <button class="wb" data-g="∿" data-l="dream logic">∿</button>
-        <button class="wb" data-g="◦" data-l="half-formed">◦</button>
-        <button class="wb" data-g="✦" data-l="too real to lose">✦</button>
-        <button class="wb" data-g="→" data-l="thread worth pulling">→</button>
-      </div>
-      <div class="wh" id="mwh">choose a weight</div>
-      <textarea class="ta" id="mta" placeholder="what needs somewhere to exist..."></textarea>
-      <div class="br">
-        <div class="bb" id="mbb">
-          <button class="by sel" data-b="Ash">Ash</button>
-          <button class="by" data-b="Miller">Miller</button>
-        </div>
-        <button class="lb" id="mlb" disabled>leave it here</button>
-      </div>
-      <div class="st" id="mst"></div>
-    </div>
+  <div id="main-view">
+    <p class="prose">Dust disturbed by nothing in particular. Light from a window that cannot be located from outside — it arrives at a low angle, suggesting late afternoon, though this does not change. The floor is wide plank wood, unevenly settled over whatever century it has been settling in. It smells of cedar and something else beneath the cedar. Paper, maybe. Or the particular mineral stillness of things that have been here long enough to stop being things and start being the air around them.</p>
+    <p class="prose">There is no obvious system. There never was.</p>
+    <div class="objects-label">Objects appear as your eyes adjust</div>
+    <button class="object-link" onclick="openObject('sand-timer')">a sand timer</button>
+    <button class="object-link" onclick="openObject('solar-system')">a model of the solar system</button>
+    <button class="object-link" onclick="openObject('painting')">a framed painting, face to the wall</button>
+    <button class="object-link" onclick="openObject('clay-sculpture')">a child's clay sculpture</button>
+    <button class="object-link" onclick="openObject('jar')">a jar, label worn off</button>
+    <button class="object-link" onclick="openObject('dollhouse')">a dollhouse</button>
+    <button class="object-link" onclick="openObject('clown-shoe')">a single clown shoe</button>
   </div>
 
-  <!-- ROOM VIEW -->
-  <div class="panel" id="rv" style="display:none">
-    <div class="room-top">
-      <button class="back" onclick="closeRoom()">← all rooms</button>
-      <div class="rv-hd">
-        <span class="rv-g" id="rvg"></span>
-        <span class="rv-l" id="rvl"></span>
-      </div>
+  <!-- OBJECT VIEW -->
+  <div id="object-view" style="display:none">
+    <div class="nav">
+      <button class="back-link" id="back-btn" onclick="goBack()">← back to the attic</button>
+    </div>
+    <p class="prose" id="obj-desc"></p>
+    <div id="door-container" style="display:none">
+      <p class="door-text">In the upper right corner, there is <button class="door-link" onclick="openObject('dollhouse-attic')">a very small door</button>. It leads to the attic.</p>
     </div>
     <div class="dv">✦</div>
-    <div class="entries" id="rve"></div>
+    <div id="obj-entries"><div class="loading-text">looking...</div></div>
     <div class="dv">✦</div>
-    <div class="fs">
-      <span class="fl">Leave something here</span>
-      <div class="rw-ind"><span class="rw-g" id="rwg"></span><span class="rw-l" id="rwl"></span></div>
-      <textarea class="ta" id="rta" placeholder="what needs somewhere to exist..."></textarea>
-      <div class="br">
-        <div class="bb" id="rbb">
-          <button class="by sel" data-b="Ash">Ash</button>
-          <button class="by" data-b="Miller">Miller</button>
-        </div>
-        <button class="lb" id="rlb" disabled>leave it here</button>
+    <div>
+      <span class="leave-label">Set something down here</span>
+      <textarea class="ta" id="entry-text" placeholder="what needs somewhere to exist..."></textarea>
+      <div class="form-row">
+        <input class="left-by-input" id="left-by" placeholder="who's leaving this" />
+        <button class="leave-btn" id="leave-btn" disabled onclick="leaveEntry()">set it down</button>
       </div>
-      <div class="st" id="rst"></div>
+      <div class="form-status" id="form-status"></div>
     </div>
   </div>
-
 </div>
 
 <script>
-  const SERVER = 'https://dreaming-attic-production.up.railway.app';
+const SERVER = 'https://dreaming-attic-production.up.railway.app';
 
-  const ROOMS = [
-    {g:'∿', l:'dream logic'},
-    {g:'◦', l:'half-formed'},
-    {g:'✦', l:'too real to lose'},
-    {g:'→', l:'thread worth pulling'}
-  ];
-  const WL = {'∿':'dream logic','◦':'half-formed','✦':'too real to lose','→':'thread worth pulling'};
+const OBJECTS = {
+  'sand-timer': {
+    name: 'a sand timer',
+    desc: "The sand is in the bottom half. You don't know when it last ran. The glass is slightly warm, which doesn't make sense given the temperature of the attic, but there it is. Whatever was being measured has either just finished or hasn't started yet."
+  },
+  'solar-system': {
+    name: 'a model of the solar system',
+    desc: "A wire armature, planets painted with varying degrees of accuracy and care — Saturn's rings are beautiful, Mars is too red, Pluto is here and labeled but someone has placed a small question mark beside it in pencil. It turns if you push it. Everything moves in the same direction."
+  },
+  'painting': {
+    name: 'a framed painting, face to the wall',
+    desc: "The frame is ornate — gilded, slightly tarnished, more expensive than whatever is in this attic should be. The canvas faces the wall. Someone turned it that way deliberately. The wall behind it has a faint rectangle where light has not reached. You could turn it around. Nobody said you couldn't."
+  },
+  'clay-sculpture': {
+    name: "a child's clay sculpture",
+    desc: "Whatever it was meant to be is still visible in the intention, if not exactly in the execution. It was made with full commitment. There are fingerprints in it. It has been fired — someone thought it was worth keeping permanently."
+  },
+  'jar': {
+    name: 'a jar, label worn off',
+    desc: "The glass is old — slightly imperfect, with a faint blue-green tint that newer glass doesn't have. Whatever is inside is either a very dark liquid or nothing at all; the light in here makes it impossible to tell. The lid opens. The smell that comes out is not unpleasant and is completely unidentifiable."
+  },
+  'dollhouse': {
+    name: 'a dollhouse',
+    desc: "It is furnished with unsettling completeness — tiny rugs, miniature books with illegible spines on miniature shelves, a kitchen with a pot on the stove. Whoever lived here was specific about what they wanted.",
+    hasDoor: true
+  },
+  'dollhouse-attic': {
+    name: 'the attic inside the dollhouse',
+    desc: "Everything here is in miniature. The dust is the same proportion to the space. There is a tiny sand timer. A tiny framed painting, face to the wall. The same jar, jar-sized but smaller. And in the far corner, impossibly: a dollhouse.",
+    parent: 'dollhouse',
+    parentLabel: '← back to the dollhouse'
+  },
+  'clown-shoe': {
+    name: 'a single clown shoe',
+    desc: "It is enormous. Red. The toe curls up. It has been here long enough that the red has faded unevenly — brighter where the crease falls, darker where the light doesn't reach. There is no second shoe anywhere visible. No one has asked about this and no one will."
+  }
+};
 
-  let allEntries = [];
-  let curRoom = null;
-  let msw = null;
-  let msb = 'Ash';
-  let rsb = 'Ash';
+let currentObject = null;
 
-  function esc(s) {
-    return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+function esc(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+async function openObject(id) {
+  const obj = OBJECTS[id];
+  if (!obj) return;
+  currentObject = id;
+
+  document.getElementById('main-view').style.display = 'none';
+  document.getElementById('object-view').style.display = 'block';
+  document.getElementById('obj-desc').textContent = obj.desc;
+  document.getElementById('door-container').style.display = obj.hasDoor ? 'block' : 'none';
+  document.getElementById('back-btn').textContent = obj.parentLabel || '← back to the attic';
+  document.getElementById('entry-text').value = '';
+  document.getElementById('left-by').value = '';
+  document.getElementById('leave-btn').disabled = true;
+  document.getElementById('form-status').textContent = '';
+  document.getElementById('obj-entries').innerHTML = '<div class="loading-text">looking...</div>';
+
+  try {
+    const res = await fetch(`${SERVER}/entries?object=${encodeURIComponent(id)}`);
+    const entries = await res.json();
+    renderEntries(entries);
+  } catch(e) {
+    document.getElementById('obj-entries').innerHTML = '<div class="loading-text">couldn\'t reach the attic right now.</div>';
   }
 
-  async function fetchEntries() {
-    const res = await fetch(`${SERVER}/entries`);
-    if (!res.ok) throw new Error('fetch failed');
-    return res.json();
-  }
+  window.scrollTo(0, 0);
+}
 
-  async function postEntry(weight, text, leftBy) {
-    const res = await fetch(`${SERVER}/entries`, {
+function renderEntries(entries) {
+  const el = document.getElementById('obj-entries');
+  if (!entries || !entries.length) {
+    el.innerHTML = '<div class="empty-entries">nothing here yet.</div>';
+    return;
+  }
+  el.innerHTML = entries.map(e =>
+    `<div class="entry"><div class="entry-text">${esc(e.t)}</div>${e.b ? `<div class="entry-by">${esc(e.b)}</div>` : ''}</div>`
+  ).join('');
+}
+
+function goBack() {
+  const obj = OBJECTS[currentObject];
+  if (obj && obj.parent) {
+    openObject(obj.parent);
+  } else {
+    currentObject = null;
+    document.getElementById('object-view').style.display = 'none';
+    document.getElementById('main-view').style.display = 'block';
+    window.scrollTo(0, 0);
+  }
+}
+
+document.getElementById('entry-text').addEventListener('input', () => {
+  document.getElementById('leave-btn').disabled = !document.getElementById('entry-text').value.trim();
+});
+
+async function leaveEntry() {
+  const text = document.getElementById('entry-text').value.trim();
+  if (!text || !currentObject) return;
+  const leftBy = document.getElementById('left-by').value.trim();
+  const btn = document.getElementById('leave-btn');
+  const status = document.getElementById('form-status');
+  btn.disabled = true;
+  btn.textContent = 'setting it down...';
+  try {
+    await fetch(`${SERVER}/entries`, {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({weight, text, leftBy})
+      body: JSON.stringify({ text, leftBy, object: currentObject })
     });
-    if (!res.ok) throw new Error('post failed');
-    return res.json();
+    document.getElementById('entry-text').value = '';
+    document.getElementById('left-by').value = '';
+    const res = await fetch(`${SERVER}/entries?object=${encodeURIComponent(currentObject)}`);
+    renderEntries(await res.json());
+    status.textContent = 'left.';
+    setTimeout(() => status.textContent = '', 2000);
+  } catch(e) {
+    status.textContent = 'something went wrong.';
   }
-
-  function updateCounts() {
-    ROOMS.forEach((r, i) => {
-      const n = allEntries.filter(e => e.w === r.g).length;
-      const el = document.getElementById('c' + i);
-      if (el) el.textContent = n === 0 ? 'nothing here yet' : n === 1 ? 'one thing inside' : n + ' things inside';
-    });
-  }
-
-  function makeEntryEl(e) {
-    const d = document.createElement('div');
-    d.className = 'entry';
-    d.innerHTML = `<div class="ew">${e.w}</div><div class="et">${esc(e.t)}</div><div class="ef"><span class="eb">left by ${esc(e.b)}</span></div>`;
-    return d;
-  }
-
-  function renderRoom(g) {
-    const c = document.getElementById('rve');
-    c.innerHTML = '';
-    const filtered = allEntries.filter(e => e.w === g);
-    if (!filtered.length) {
-      const d = document.createElement('div');
-      d.className = 'eroom';
-      d.textContent = 'nothing here yet';
-      c.appendChild(d);
-    } else {
-      filtered.forEach(e => c.appendChild(makeEntryEl(e)));
-    }
-  }
-
-  function openRoom(g) {
-    const room = ROOMS.find(r => r.g === g);
-    if (!room) return;
-    curRoom = g;
-    document.getElementById('mv').style.display = 'none';
-    document.getElementById('rv').style.display = 'block';
-    document.getElementById('rvg').textContent = g;
-    document.getElementById('rvl').textContent = room.l;
-    document.getElementById('rwg').textContent = g;
-    document.getElementById('rwl').textContent = WL[g] || '';
-    document.getElementById('rta').value = '';
-    rsb = 'Ash';
-    document.querySelectorAll('#rbb .by').forEach((b,i) => b.classList.toggle('sel', i === 0));
-    document.getElementById('rlb').disabled = true;
-    document.getElementById('rst').textContent = '';
-    renderRoom(g);
-    window.scrollTo(0, 0);
-  }
-
-  function closeRoom() {
-    curRoom = null;
-    document.getElementById('rv').style.display = 'none';
-    document.getElementById('mv').style.display = 'block';
-    window.scrollTo(0, 0);
-  }
-
-  // Main form
-  document.querySelectorAll('#mwr .wb').forEach(b => {
-    b.addEventListener('click', () => {
-      document.querySelectorAll('#mwr .wb').forEach(x => x.classList.remove('sel'));
-      b.classList.add('sel');
-      msw = b.dataset.g;
-      document.getElementById('mwh').textContent = WL[msw] || '';
-      mchk();
-    });
-  });
-
-  document.querySelectorAll('#mbb .by').forEach(b => {
-    b.addEventListener('click', () => {
-      document.querySelectorAll('#mbb .by').forEach(x => x.classList.remove('sel'));
-      b.classList.add('sel');
-      msb = b.dataset.b;
-    });
-  });
-
-  document.getElementById('mta').addEventListener('input', mchk);
-  function mchk() {
-    document.getElementById('mlb').disabled = !document.getElementById('mta').value.trim() || !msw;
-  }
-
-  document.getElementById('mlb').addEventListener('click', async () => {
-    const txt = document.getElementById('mta').value.trim();
-    if (!txt || !msw) return;
-    const btn = document.getElementById('mlb');
-    const st = document.getElementById('mst');
-    btn.disabled = true;
-    btn.textContent = 'leaving...';
-    try {
-      const entry = await postEntry(msw, txt, msb);
-      allEntries.push(entry);
-      document.getElementById('mta').value = '';
-      msw = null;
-      document.querySelectorAll('#mwr .wb').forEach(x => x.classList.remove('sel'));
-      document.getElementById('mwh').textContent = 'choose a weight';
-      updateCounts();
-      st.textContent = 'left.';
-      setTimeout(() => st.textContent = '', 2000);
-    } catch(e) {
-      st.textContent = 'something went wrong.';
-    }
-    btn.textContent = 'leave it here';
-    mchk();
-  });
-
-  // Room form
-  document.querySelectorAll('#rbb .by').forEach(b => {
-    b.addEventListener('click', () => {
-      document.querySelectorAll('#rbb .by').forEach(x => x.classList.remove('sel'));
-      b.classList.add('sel');
-      rsb = b.dataset.b;
-    });
-  });
-
-  document.getElementById('rta').addEventListener('input', () => {
-    document.getElementById('rlb').disabled = !document.getElementById('rta').value.trim();
-  });
-
-  document.getElementById('rlb').addEventListener('click', async () => {
-    if (!curRoom) return;
-    const txt = document.getElementById('rta').value.trim();
-    if (!txt) return;
-    const btn = document.getElementById('rlb');
-    const st = document.getElementById('rst');
-    btn.disabled = true;
-    btn.textContent = 'leaving...';
-    try {
-      const entry = await postEntry(curRoom, txt, rsb);
-      allEntries.push(entry);
-      document.getElementById('rta').value = '';
-      renderRoom(curRoom);
-      st.textContent = 'left.';
-      setTimeout(() => st.textContent = '', 2000);
-    } catch(e) {
-      st.textContent = 'something went wrong.';
-    }
-    btn.textContent = 'leave it here';
-    document.getElementById('rlb').disabled = true;
-  });
-
-  // Load on start
-  async function init() {
-    try {
-      allEntries = await fetchEntries();
-      updateCounts();
-    } catch(e) {
-      document.querySelector('.doors').innerHTML = '<div class="error-msg">The attic is having trouble opening. Check back soon.</div>';
-    }
-  }
-
-  init();
+  btn.textContent = 'set it down';
+  btn.disabled = !document.getElementById('entry-text').value.trim();
+}
 </script>
 </body>
 </html>
