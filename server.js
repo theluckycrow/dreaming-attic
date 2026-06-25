@@ -75,7 +75,7 @@ function createServer() {
       if (object) {
         let text = `— Near ${ATTIC_OBJECTS[object]} —\n\n`;
         filtered.forEach((e) => {
-          text += `${e.t}\n— ${e.b || 'unknown'}\n\n`;
+          text += `[id:${e.id}] ${e.t}\n— ${e.b || 'unknown'}\n\n`;
         });
         return { content: [{ type: 'text', text: text.trim() }] };
       }
@@ -93,13 +93,13 @@ function createServer() {
       OBJECT_IDS.forEach((k) => {
         if (grouped[k].length > 0) {
           text += `${ATTIC_OBJECTS[k]}\n`;
-          grouped[k].forEach((e) => { text += `\n${e.t}\n— ${e.b || 'unknown'}\n`; });
+          grouped[k].forEach((e) => { text += `\n[id:${e.id}] ${e.t}\n— ${e.b || 'unknown'}\n`; });
           text += '\n';
         }
       });
       if (grouped['_unlocated'].length > 0) {
         text += `unlocated\n`;
-        grouped['_unlocated'].forEach((e) => { text += `\n${e.t}\n— ${e.b || 'unknown'}\n`; });
+        grouped['_unlocated'].forEach((e) => { text += `\n[id:${e.id}] ${e.t}\n— ${e.b || 'unknown'}\n`; });
       }
 
       return { content: [{ type: 'text', text: text.trim() }] };
