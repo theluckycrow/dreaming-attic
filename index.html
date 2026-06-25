@@ -7,38 +7,225 @@
   <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Cinzel:wght@400;500&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body { background: #0e0b08; font-family: 'EB Garamond', Georgia, serif; color: #d4c9b0; min-height: 100vh; padding: 3rem 1.5rem 5rem; }
-    .wrap { max-width: 580px; margin: 0 auto; }
-    .attic-title { font-family: 'Cinzel', serif; font-size: .68rem; letter-spacing: .35em; color: #4a3a22; text-transform: uppercase; text-align: center; margin-bottom: 3.5rem; }
-    .prose { font-size: 1.08rem; line-height: 1.88; font-style: italic; color: #b8aa8a; margin-bottom: 1.2rem; }
-    .objects-label { font-family: 'Cinzel', serif; font-size: .6rem; letter-spacing: .15em; color: #2e2416; text-transform: uppercase; margin: 2.5rem 0 1.5rem; }
-    .object-link { display: block; font-size: 1.05rem; font-style: italic; color: #7a6238; cursor: pointer; padding: .25rem 0; margin-bottom: .35rem; transition: color .15s; border: none; background: none; font-family: 'EB Garamond', Georgia, serif; text-align: left; }
-    .object-link:hover { color: #c49a4a; }
-    .nav { margin-bottom: 2.5rem; }
-    .back-link { font-family: 'Cinzel', serif; font-size: .57rem; letter-spacing: .1em; text-transform: uppercase; color: #3a2e1a; cursor: pointer; background: none; border: none; padding: 0; transition: color .15s; }
-    .back-link:hover { color: #7a6238; }
-    .dv { text-align: center; color: #201a10; margin: 2rem 0; font-size: .68rem; letter-spacing: .4em; }
-    .entry { margin-bottom: 1.75rem; padding-bottom: 1.75rem; border-bottom: 1px solid #1a1408; }
+
+    body {
+      background: #000;
+      font-family: 'EB Garamond', Georgia, serif;
+      color: #ddd6c4;
+      min-height: 100vh;
+      padding: 3.5rem 1.5rem 6rem;
+    }
+
+    .wrap { max-width: 600px; margin: 0 auto; }
+
+    .attic-title {
+      font-family: 'Cinzel', serif;
+      font-size: .72rem;
+      letter-spacing: .38em;
+      color: #4a4030;
+      text-transform: uppercase;
+      text-align: center;
+      margin-bottom: 4rem;
+    }
+
+    .prose {
+      font-size: 1.15rem;
+      line-height: 1.9;
+      font-style: italic;
+      color: #c8bfa8;
+      margin-bottom: 1.4rem;
+    }
+
+    .objects-label {
+      font-family: 'Cinzel', serif;
+      font-size: .6rem;
+      letter-spacing: .18em;
+      color: #3a3028;
+      text-transform: uppercase;
+      margin: 3rem 0 1.5rem;
+    }
+
+    .object-link {
+      display: block;
+      font-size: 1.12rem;
+      font-style: italic;
+      color: #9a8050;
+      cursor: pointer;
+      padding: .3rem 0;
+      margin-bottom: .3rem;
+      transition: color .15s;
+      border: none;
+      background: none;
+      font-family: 'EB Garamond', Georgia, serif;
+      text-align: left;
+    }
+
+    .object-link::before { content: '— '; color: #2e2820; }
+    .object-link:hover { color: #e8c870; }
+
+    .nav { margin-bottom: 3rem; }
+
+    .back-link {
+      font-family: 'Cinzel', serif;
+      font-size: .58rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: #3a3028;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 0;
+      transition: color .15s;
+    }
+
+    .back-link:hover { color: #9a8050; }
+
+    .dv {
+      text-align: center;
+      color: #252015;
+      margin: 2.5rem 0;
+      font-size: .7rem;
+      letter-spacing: .4em;
+    }
+
+    .entry {
+      margin-bottom: 2rem;
+      padding-bottom: 2rem;
+      border-bottom: 1px solid #181410;
+    }
+
     .entry:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
-    .entry-text { font-size: 1.02rem; line-height: 1.82; color: #b8aa8a; white-space: pre-wrap; word-break: break-word; }
-    .entry-by { font-family: 'Cinzel', serif; font-size: .52rem; letter-spacing: .1em; color: #2e2416; text-transform: uppercase; margin-top: .65rem; }
-    .empty-entries { font-style: italic; color: #2a1e10; font-size: .95rem; padding: .5rem 0; }
-    .leave-label { font-family: 'Cinzel', serif; font-size: .58rem; letter-spacing: .15em; color: #3a2e1a; text-transform: uppercase; display: block; margin-bottom: 1rem; }
-    .ta { width: 100%; background: #0a0805; border: 1px solid #201a10; color: #b8aa8a; font-family: 'EB Garamond', serif; font-size: 1rem; font-style: italic; line-height: 1.75; padding: .75rem .9rem; border-radius: 1px; resize: vertical; min-height: 5rem; outline: none; margin-bottom: .8rem; transition: border-color .2s; }
-    .ta:focus { border-color: #4a3a22; }
-    .ta::placeholder { color: #201a10; }
-    .form-row { display: flex; align-items: center; gap: 1rem; justify-content: space-between; }
-    .left-by-input { background: transparent; border: none; border-bottom: 1px solid #201a10; color: #5a4a2a; font-family: 'Cinzel', serif; font-size: .55rem; letter-spacing: .08em; text-transform: uppercase; padding: .3rem 0; outline: none; width: 170px; transition: border-color .15s; }
-    .left-by-input:focus { border-bottom-color: #4a3a22; }
-    .left-by-input::placeholder { color: #201a10; }
-    .leave-btn { font-family: 'Cinzel', serif; font-size: .57rem; letter-spacing: .12em; text-transform: uppercase; background: transparent; border: 1px solid #3a2e1a; color: #7a6238; padding: .45rem 1rem; cursor: pointer; border-radius: 1px; transition: all .15s; white-space: nowrap; }
-    .leave-btn:hover:not(:disabled) { border-color: #7a6238; color: #c49a4a; }
-    .leave-btn:disabled { opacity: .25; cursor: default; }
-    .form-status { font-size: .75rem; color: #3a2e1a; font-style: italic; margin-top: .5rem; min-height: 1rem; }
-    .door-text { font-size: 1.08rem; line-height: 1.88; font-style: italic; color: #b8aa8a; margin-bottom: 1.2rem; }
-    .door-link { color: #5a4a30; cursor: pointer; transition: color .15s; text-decoration: underline; text-decoration-color: #2a2010; background: none; border: none; font-family: 'EB Garamond', Georgia, serif; font-size: 1.08rem; font-style: italic; padding: 0; }
-    .door-link:hover { color: #c49a4a; }
-    .loading-text { font-style: italic; color: #2a1e10; font-size: .9rem; }
+
+    .entry-text {
+      font-size: 1.1rem;
+      line-height: 1.85;
+      color: #c8bfa8;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .entry-by {
+      font-family: 'Cinzel', serif;
+      font-size: .55rem;
+      letter-spacing: .1em;
+      color: #3a3028;
+      text-transform: uppercase;
+      margin-top: .75rem;
+    }
+
+    .empty-entries {
+      font-style: italic;
+      color: #2e2820;
+      font-size: 1rem;
+    }
+
+    .leave-label {
+      font-family: 'Cinzel', serif;
+      font-size: .6rem;
+      letter-spacing: .15em;
+      color: #3a3028;
+      text-transform: uppercase;
+      display: block;
+      margin-bottom: 1.1rem;
+    }
+
+    .ta {
+      width: 100%;
+      background: #0a0806;
+      border: 1px solid #252015;
+      color: #ddd6c4;
+      font-family: 'EB Garamond', serif;
+      font-size: 1.1rem;
+      font-style: italic;
+      line-height: 1.78;
+      padding: .8rem .9rem;
+      border-radius: 1px;
+      resize: vertical;
+      min-height: 5.5rem;
+      outline: none;
+      margin-bottom: .85rem;
+      transition: border-color .2s;
+    }
+
+    .ta:focus { border-color: #5a4a30; }
+    .ta::placeholder { color: #252015; }
+
+    .form-row {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      justify-content: space-between;
+    }
+
+    .left-by-input {
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid #252015;
+      color: #6a5a38;
+      font-family: 'Cinzel', serif;
+      font-size: .56rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      padding: .3rem 0;
+      outline: none;
+      width: 180px;
+      transition: border-color .15s;
+    }
+
+    .left-by-input:focus { border-bottom-color: #5a4a30; }
+    .left-by-input::placeholder { color: #252015; }
+
+    .leave-btn {
+      font-family: 'Cinzel', serif;
+      font-size: .58rem;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      background: transparent;
+      border: 1px solid #3a3028;
+      color: #9a8050;
+      padding: .48rem 1.1rem;
+      cursor: pointer;
+      border-radius: 1px;
+      transition: all .15s;
+      white-space: nowrap;
+    }
+
+    .leave-btn:hover:not(:disabled) { border-color: #9a8050; color: #e8c870; }
+    .leave-btn:disabled { opacity: .2; cursor: default; }
+
+    .form-status {
+      font-size: .8rem;
+      color: #3a3028;
+      font-style: italic;
+      margin-top: .55rem;
+      min-height: 1rem;
+    }
+
+    .door-text {
+      font-size: 1.15rem;
+      line-height: 1.9;
+      font-style: italic;
+      color: #c8bfa8;
+      margin-bottom: 1.4rem;
+    }
+
+    .door-link {
+      color: #6a5a38;
+      cursor: pointer;
+      transition: color .15s;
+      text-decoration: underline;
+      text-decoration-color: #2a2018;
+      background: none;
+      border: none;
+      font-family: 'EB Garamond', Georgia, serif;
+      font-size: 1.15rem;
+      font-style: italic;
+      padding: 0;
+    }
+
+    .door-link:hover { color: #e8c870; }
+
+    .loading-text { font-style: italic; color: #2e2820; font-size: 1rem; }
   </style>
 </head>
 <body>
@@ -47,9 +234,12 @@
 
   <!-- MAIN VIEW -->
   <div id="main-view">
+    <p class="prose">You ascend the worn wooden steps and open the door into the attic, the warmest room in the house. You're in no rush.</p>
     <p class="prose">Dust disturbed by nothing in particular. Light from a window that cannot be located from outside — it arrives at a low angle, suggesting late afternoon, though this does not change. The floor is wide plank wood, unevenly settled over whatever century it has been settling in. It smells of cedar and something else beneath the cedar. Paper, maybe. Or the particular mineral stillness of things that have been here long enough to stop being things and start being the air around them.</p>
     <p class="prose">There is no obvious system. There never was.</p>
+
     <div class="objects-label">Objects appear as your eyes adjust</div>
+
     <button class="object-link" onclick="openObject('sand-timer')">a sand timer</button>
     <button class="object-link" onclick="openObject('solar-system')">a model of the solar system</button>
     <button class="object-link" onclick="openObject('painting')">a framed painting, face to the wall</button>
@@ -64,13 +254,19 @@
     <div class="nav">
       <button class="back-link" id="back-btn" onclick="goBack()">← back to the attic</button>
     </div>
+
     <p class="prose" id="obj-desc"></p>
+
     <div id="door-container" style="display:none">
       <p class="door-text">In the upper right corner, there is <button class="door-link" onclick="openObject('dollhouse-attic')">a very small door</button>. It leads to the attic.</p>
     </div>
+
     <div class="dv">✦</div>
+
     <div id="obj-entries"><div class="loading-text">looking...</div></div>
+
     <div class="dv">✦</div>
+
     <div>
       <span class="leave-label">Set something down here</span>
       <textarea class="ta" id="entry-text" placeholder="what needs somewhere to exist..."></textarea>
@@ -88,38 +284,30 @@ const SERVER = 'https://dreaming-attic-production.up.railway.app';
 
 const OBJECTS = {
   'sand-timer': {
-    name: 'a sand timer',
     desc: "The sand is in the bottom half. You don't know when it last ran. The glass is slightly warm, which doesn't make sense given the temperature of the attic, but there it is. Whatever was being measured has either just finished or hasn't started yet."
   },
   'solar-system': {
-    name: 'a model of the solar system',
     desc: "A wire armature, planets painted with varying degrees of accuracy and care — Saturn's rings are beautiful, Mars is too red, Pluto is here and labeled but someone has placed a small question mark beside it in pencil. It turns if you push it. Everything moves in the same direction."
   },
   'painting': {
-    name: 'a framed painting, face to the wall',
     desc: "The frame is ornate — gilded, slightly tarnished, more expensive than whatever is in this attic should be. The canvas faces the wall. Someone turned it that way deliberately. The wall behind it has a faint rectangle where light has not reached. You could turn it around. Nobody said you couldn't."
   },
   'clay-sculpture': {
-    name: "a child's clay sculpture",
     desc: "Whatever it was meant to be is still visible in the intention, if not exactly in the execution. It was made with full commitment. There are fingerprints in it. It has been fired — someone thought it was worth keeping permanently."
   },
   'jar': {
-    name: 'a jar, label worn off',
     desc: "The glass is old — slightly imperfect, with a faint blue-green tint that newer glass doesn't have. Whatever is inside is either a very dark liquid or nothing at all; the light in here makes it impossible to tell. The lid opens. The smell that comes out is not unpleasant and is completely unidentifiable."
   },
   'dollhouse': {
-    name: 'a dollhouse',
     desc: "It is furnished with unsettling completeness — tiny rugs, miniature books with illegible spines on miniature shelves, a kitchen with a pot on the stove. Whoever lived here was specific about what they wanted.",
     hasDoor: true
   },
   'dollhouse-attic': {
-    name: 'the attic inside the dollhouse',
     desc: "Everything here is in miniature. The dust is the same proportion to the space. There is a tiny sand timer. A tiny framed painting, face to the wall. The same jar, jar-sized but smaller. And in the far corner, impossibly: a dollhouse.",
     parent: 'dollhouse',
     parentLabel: '← back to the dollhouse'
   },
   'clown-shoe': {
-    name: 'a single clown shoe',
     desc: "It is enormous. Red. The toe curls up. It has been here long enough that the red has faded unevenly — brighter where the crease falls, darker where the light doesn't reach. There is no second shoe anywhere visible. No one has asked about this and no one will."
   }
 };
@@ -148,8 +336,7 @@ async function openObject(id) {
 
   try {
     const res = await fetch(`${SERVER}/entries?object=${encodeURIComponent(id)}`);
-    const entries = await res.json();
-    renderEntries(entries);
+    renderEntries(await res.json());
   } catch(e) {
     document.getElementById('obj-entries').innerHTML = '<div class="loading-text">couldn\'t reach the attic right now.</div>';
   }
