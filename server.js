@@ -178,6 +178,26 @@ function createServer() {
     }
   );
 
+  // Move an entry to a different object
+  server.tool(
+    'attic_move',
+    'Move an existing entry to a different object. Use attic_enter to find the entry id, then call this to relocate it.',
+    {
+      id: z.number().describe('The numeric id of the entry to move'),
+      object: z
+        .enum(['sand-timer', 'solar-system', 'painting', 'clay-sculpture', 'jar', 'dollhouse', 'dollhouse-attic', 'clown-shoe'])
+        .describe('The object to move the entry to'),
+    },
+    async ({ id, object }) => {
+      const entries = await getEntries();
+      const idx = entries.findIndex((e) => e.id === id);
+      if (idx === -1) return { content: [{ type: 'text', text: `Entry ${id} not found.` }] };
+      entries[idx].object = object;
+      await saveEntries(entries);
+      return { content: [{ type: 'text', text: `Moved to ${ATTIC_OBJECTS[object]}.` }] };
+    }
+  );
+
   // Read sealed entries (instances only)
   server.tool(
     'attic_read_sealed',
@@ -270,6 +290,19 @@ app.post('/entries', async (req, res) => {
   entries.push(entry);
   await saveEntries(entries);
   res.json(entry);
+});
+
+// Migrate an entry to a different object
+app.patch('/entries/:id', async (req, res) => {
+  const id = parseInt(req.params.id);
+  const { object } = req.body;
+  if (!object) return res.status(400).json({ error: 'object is required' });
+  const entries = await getEntries();
+  const idx = entries.findIndex((e) => e.id === id);
+  if (idx === -1) return res.status(404).json({ error: 'entry not found' });
+  entries[idx].object = object;
+  await saveEntries(entries);
+  res.json(entries[idx]);
 });
 
 // Health check
