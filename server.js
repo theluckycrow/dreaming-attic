@@ -30,8 +30,8 @@ async function migrateLegacyEntries() {
   const entries = await getEntries();
   let changed = false;
   entries.forEach((e) => {
-    if (e.object !== undefined && e.object !== null && e.room === undefined) {
-      e.w = '⊘';
+if (e.room === undefined) {
+  e.w = '⊘';
       e.room = null;
       changed = true;
     }
